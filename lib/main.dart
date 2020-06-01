@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:proj_yarhaha/amiiboPost.dart';
+import 'package:proj_yarhaha/amiiboDetail.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,22 +19,6 @@ Future<List<AmiiboPost>> fetchAmiibo() async {
   }
   else {
     throw "http get failed";
-  }
-}
-
-class AmiiboPost {
-  final String id;
-  final String name;
-  final String image;
-
-  AmiiboPost({this.id, this.name, this.image});
-
-  factory AmiiboPost.fromJson(Map<String, dynamic> json) {
-    return AmiiboPost(
-      id: json['head'] + json['tail'],
-      name: json['name'],
-      image: json['image'],
-    );
   }
 }
 
@@ -157,30 +142,4 @@ class AmiiboState extends State<Amiibo> {
 class Amiibo extends StatefulWidget {
   @override
   AmiiboState createState() => AmiiboState();
-}
-
-class AmiiboDetail extends StatelessWidget {
-  final AmiiboPost amiiboPost;
-
-  AmiiboDetail({Key key, @required this.amiiboPost}) : super(key: key);
-
-  Stack imagePlaceholder(String image) {
-    return Stack(
-      children: <Widget>[
-        Center(child: CircularProgressIndicator()),
-        Center(child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: image))
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext buildContext) {
-    return Scaffold(
-      appBar: AppBar(title: Text(amiiboPost.name)),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: imagePlaceholder(amiiboPost.image),
-      )
-    );
-  }
 }
